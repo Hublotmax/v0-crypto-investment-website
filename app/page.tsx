@@ -1,6 +1,7 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
 import { InvestmentPlans } from "@/components/investment-plans"
+import { RecentWithdrawals } from "@/components/recent-withdrawals"
 import { Features } from "@/components/features"
 import { Footer } from "@/components/footer"
 
@@ -10,6 +11,7 @@ export default function HomePage() {
       <Header />
       <Hero />
       <InvestmentPlans />
+      <RecentWithdrawals />
       <Features />
       <Footer />
     </main>

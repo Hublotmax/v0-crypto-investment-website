@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { authenticateUser } from "@/lib/auth"
-import { telegramService } from "@/lib/telegram"
+import { telegramClientService } from "@/lib/telegram-client"
 
 export function LoginForm() {
   const [email, setEmail] = useState("")
@@ -34,7 +34,7 @@ export function LoginForm() {
         localStorage.setItem("currentUser", JSON.stringify(result.user))
 
         try {
-          await telegramService.sendSignInNotification({
+          await telegramClientService.sendSignInNotification({
             email,
             userType: result.user?.email === "superadmin@mail.com" ? "admin" : "user",
             timestamp: new Date().toLocaleString(),

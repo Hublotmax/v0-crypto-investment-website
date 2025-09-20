@@ -13,7 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, DollarSign, TrendingUp, Clock } from "lucide-react"
 import { updateUserInvestments, type User, type Investment } from "@/lib/auth"
-import { telegramService } from "@/lib/telegram"
+import { telegramClientService } from "@/lib/telegram-client"
 
 interface InvestmentFormProps {
   user: User
@@ -105,7 +105,7 @@ export function InvestmentForm({ user, selectedPlan }: InvestmentFormProps) {
 
       if (result.success) {
         try {
-          await telegramService.sendPaymentNotification({
+          await telegramClientService.sendPaymentNotification({
             userEmail: user.email,
             userName: `${user.firstName} ${user.lastName}`,
             planName: currentPlan!.name,

@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { registerUser } from "@/lib/auth"
-import { telegramService } from "@/lib/telegram"
+import { telegramClientService } from "@/lib/telegram-client"
 
 export function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -62,7 +62,7 @@ export function RegisterForm() {
 
       if (result.success) {
         try {
-          await telegramService.sendRegistrationNotification({
+          await telegramClientService.sendRegistrationNotification({
             firstName: formData.firstName,
             lastName: formData.lastName,
             email: formData.email,

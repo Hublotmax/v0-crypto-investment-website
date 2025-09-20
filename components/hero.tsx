@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, TrendingUp } from "lucide-react"
 import Link from "next/link"
+import Script from "next/script"
 
 export function Hero() {
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden">
+      <Script src="https://www.livecoinwatch.com/static/lcw-widget.js" strategy="lazyOnload" />
+
       {/* Background decoration */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-accent/10 rounded-full blur-3xl" />
@@ -31,6 +34,20 @@ export function Hero() {
           Quickly deploy our suite of crypto investment plans designed for retail. Our industry-leading platform powers
           fixed income investing for firms representing $3T+ in assets.
         </p>
+
+        <div className="mb-12">
+          <div className="bg-card/50 backdrop-blur-sm border rounded-lg p-6 max-w-4xl mx-auto">
+            <h3 className="text-lg font-semibold mb-4 text-foreground">Live Crypto Market Data</h3>
+            <div
+              className="livecoinwatch-widget-5"
+              data-lcw-base="USD"
+              data-lcw-color-tx="#999999"
+              data-lcw-marquee-1="coins"
+              data-lcw-marquee-2="movers"
+              data-lcw-marquee-items="10"
+            />
+          </div>
+        </div>
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
