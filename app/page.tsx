@@ -3,6 +3,7 @@ import { Hero } from "@/components/hero"
 import { InvestmentPlans } from "@/components/investment-plans"
 import { RecentWithdrawals } from "@/components/recent-withdrawals"
 import { Features } from "@/components/features"
+import { TestimonialsSlider } from "@/components/testimonials-slider"
 import { Footer } from "@/components/footer"
 
 export default function HomePage() {
@@ -13,6 +14,7 @@ export default function HomePage() {
       <InvestmentPlans />
       <RecentWithdrawals />
       <Features />
+      <TestimonialsSlider />
       <Footer />
     </main>
   )

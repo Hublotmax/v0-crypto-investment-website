@@ -27,33 +27,46 @@ export function LoginForm() {
     setError("")
 
     try {
+      console.log("[v0] Starting login process for:", email)
       const result = await authenticateUser(email, password)
 
+      console.log("[v0] Login result:", result)
+
       if (result.success) {
+        console.log("[v0] Login successful, storing user session")
         // Store user session
         localStorage.setItem("currentUser", JSON.stringify(result.user))
 
         try {
+          console.log("[v0] Sending Telegram sign-in notification")
           await telegramClientService.sendSignInNotification({
             email,
             userType: result.user?.email === "superadmin@mail.com" ? "admin" : "user",
             timestamp: new Date().toLocaleString(),
           })
+          console.log("[v0] Telegram notification sent successfully")
         } catch (telegramError) {
           console.error("[v0] Failed to send Telegram notification:", telegramError)
           // Don't block login if Telegram fails
         }
 
-        // Redirect based on user type
-        if (result.user?.email === "superadmin@mail.com") {
-          router.push("/admin")
-        } else {
-          router.push("/dashboard")
-        }
+        const redirectPath = result.user?.email === "superadmin@mail.com" ? "/admin" : "/dashboard"
+        console.log("[v0] Redirecting to:", redirectPath)
+
+        // Show success message briefly
+        setError(`Login successful! Redirecting to ${redirectPath.substring(1)}...`)
+
+        // Add a small delay to ensure localStorage is set
+        setTimeout(() => {
+          console.log("[v0] Executing redirect to", redirectPath)
+          router.push(redirectPath)
+        }, 100)
       } else {
+        console.log("[v0] Login failed:", result.error)
         setError(result.error || "Invalid credentials")
       }
     } catch (err) {
+      console.error("[v0] Login error:", err)
       setError("An error occurred during login")
     } finally {
       setIsLoading(false)

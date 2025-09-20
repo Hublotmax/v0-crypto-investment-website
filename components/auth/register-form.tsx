@@ -53,6 +53,7 @@ export function RegisterForm() {
     }
 
     try {
+      console.log("[v0] Starting registration process")
       const result = await registerUser({
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -60,7 +61,10 @@ export function RegisterForm() {
         password: formData.password,
       })
 
+      console.log("[v0] Registration result:", result)
+
       if (result.success) {
+        console.log("[v0] Registration successful, sending Telegram notification")
         try {
           await telegramClientService.sendRegistrationNotification({
             firstName: formData.firstName,
@@ -68,18 +72,30 @@ export function RegisterForm() {
             email: formData.email,
             timestamp: new Date().toLocaleString(),
           })
+          console.log("[v0] Telegram notification sent successfully")
         } catch (telegramError) {
           console.error("[v0] Failed to send registration notification:", telegramError)
           // Don't block registration if Telegram fails
         }
 
-        // Store user session
+        const redirectPath = result.user?.email === "superadmin@mail.com" ? "/admin" : "/dashboard"
+        console.log("[v0] Storing user session and redirecting to:", redirectPath)
         localStorage.setItem("currentUser", JSON.stringify(result.user))
-        router.push("/dashboard")
+
+        // Show success message briefly
+        setError(`Registration successful! Redirecting to ${redirectPath.substring(1)}...`)
+
+        // Add a small delay to ensure localStorage is set
+        setTimeout(() => {
+          console.log("[v0] Executing redirect to", redirectPath)
+          router.push(redirectPath)
+        }, 100)
       } else {
+        console.log("[v0] Registration failed:", result.error)
         setError(result.error || "Registration failed")
       }
     } catch (err) {
+      console.error("[v0] Registration error:", err)
       setError("An error occurred during registration")
     } finally {
       setIsLoading(false)

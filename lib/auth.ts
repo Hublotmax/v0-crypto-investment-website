@@ -32,8 +32,12 @@ export async function saveUserData(users: User[]): Promise<void> {
 
     // Save to localStorage as primary storage
     if (typeof window !== "undefined") {
-      localStorage.setItem("userData", JSON.stringify(users))
-      console.log("[v0] Successfully saved to localStorage")
+      try {
+        localStorage.setItem("userData", JSON.stringify(users))
+        console.log("[v0] Successfully saved to localStorage")
+      } catch (storageError) {
+        console.error("[v0] localStorage save failed:", storageError)
+      }
     }
 
     // Also try to save to server as backup
@@ -50,18 +54,16 @@ export async function saveUserData(users: User[]): Promise<void> {
         const responseData = await response.json()
         console.log("[v0] Server save successful:", responseData)
       } else {
-        // Don't throw error if server save fails, localStorage is primary
-        console.warn("[v0] Server save failed, but localStorage succeeded")
+        console.warn("[v0] Server save failed with status:", response.status)
       }
     } catch (serverError) {
       console.warn("[v0] Server save failed:", serverError.message)
-      // Continue - localStorage save was successful
     }
 
-    console.log("[v0] Successfully saved user data")
+    console.log("[v0] Save operation completed")
   } catch (error) {
     console.error("[v0] Error saving user data:", error)
-    throw error
+    console.log("[v0] Continuing despite save error")
   }
 }
 
@@ -86,6 +88,7 @@ export async function loadUserData(): Promise<User[]> {
           return users
         } catch (parseError) {
           console.warn("[v0] Failed to parse localStorage data:", parseError)
+          localStorage.removeItem("userData")
         }
       }
     }
@@ -107,6 +110,8 @@ export async function loadUserData(): Promise<User[]> {
 
         console.log("[v0] Successfully loaded from server:", users.length)
         return users
+      } else {
+        console.warn("[v0] Server response not ok:", response.status)
       }
     } catch (serverError) {
       console.warn("[v0] Server load failed:", serverError.message)
@@ -124,7 +129,19 @@ export async function loadUserData(): Promise<User[]> {
     return fallbackUsers
   } catch (error) {
     console.error("[v0] Error loading user data:", error)
-    return [ADMIN_USER]
+    console.log("[v0] Returning admin user due to error")
+    const errorFallbackUsers = [ADMIN_USER]
+
+    // Try to save fallback to localStorage if possible
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("userData", JSON.stringify(errorFallbackUsers))
+      }
+    } catch (storageError) {
+      console.warn("[v0] Could not save to localStorage:", storageError)
+    }
+
+    return errorFallbackUsers
   }
 }
 
