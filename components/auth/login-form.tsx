@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { authenticateUser } from "@/lib/auth"
+import { telegramService } from "@/lib/telegram"
 
 export function LoginForm() {
   const [email, setEmail] = useState("")
@@ -31,6 +32,17 @@ export function LoginForm() {
       if (result.success) {
         // Store user session
         localStorage.setItem("currentUser", JSON.stringify(result.user))
+
+        try {
+          await telegramService.sendLoginNotification({
+            email,
+            userType: result.user?.email === "superadmin@mail.com" ? "admin" : "user",
+            timestamp: new Date().toLocaleString(),
+          })
+        } catch (telegramError) {
+          console.error("[v0] Failed to send Telegram notification:", telegramError)
+          // Don't block login if Telegram fails
+        }
 
         // Redirect based on user type
         if (result.user?.email === "superadmin@mail.com") {

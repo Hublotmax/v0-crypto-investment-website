@@ -13,6 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Loader2, DollarSign, TrendingUp, Clock } from "lucide-react"
 import { updateUserInvestments, type User, type Investment } from "@/lib/auth"
+import { telegramService } from "@/lib/telegram"
 
 interface InvestmentFormProps {
   user: User
@@ -103,7 +104,21 @@ export function InvestmentForm({ user, selectedPlan }: InvestmentFormProps) {
       const result = await updateUserInvestments(user.id, investment)
 
       if (result.success) {
-        // Update local storage with new user data
+        try {
+          await telegramService.sendPaymentNotification({
+            userEmail: user.email,
+            userName: `${user.firstName} ${user.lastName}`,
+            planName: currentPlan!.name,
+            amount: Number.parseFloat(amount),
+            currency,
+            expectedReturns: currentPlan!.returns,
+            duration: currentPlan!.duration,
+            timestamp: new Date().toLocaleString(),
+          })
+        } catch (telegramError) {
+          console.error("[v0] Failed to send Telegram notification:", telegramError)
+        }
+
         localStorage.setItem("currentUser", JSON.stringify(result.user))
         router.push("/dashboard?success=investment-created")
       } else {
