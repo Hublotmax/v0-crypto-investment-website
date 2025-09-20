@@ -34,7 +34,7 @@ export function LoginForm() {
         localStorage.setItem("currentUser", JSON.stringify(result.user))
 
         try {
-          await telegramService.sendLoginNotification({
+          await telegramService.sendSignInNotification({
             email,
             userType: result.user?.email === "superadmin@mail.com" ? "admin" : "user",
             timestamp: new Date().toLocaleString(),

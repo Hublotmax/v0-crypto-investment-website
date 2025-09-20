@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
 import { registerUser } from "@/lib/auth"
+import { telegramService } from "@/lib/telegram"
 
 export function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -60,6 +61,18 @@ export function RegisterForm() {
       })
 
       if (result.success) {
+        try {
+          await telegramService.sendRegistrationNotification({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            timestamp: new Date().toLocaleString(),
+          })
+        } catch (telegramError) {
+          console.error("[v0] Failed to send registration notification:", telegramError)
+          // Don't block registration if Telegram fails
+        }
+
         // Store user session
         localStorage.setItem("currentUser", JSON.stringify(result.user))
         router.push("/dashboard")

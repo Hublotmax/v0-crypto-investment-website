@@ -1,4 +1,4 @@
-// Telegram notification service for user login and payment submissions
+// Telegram notification service for user login, payment submissions, and registration
 export interface TelegramConfig {
   token: string
   chatId: string
@@ -20,6 +20,21 @@ export interface PaymentNotification {
   expectedReturns: string
   duration: string
   timestamp: string
+}
+
+export interface RegistrationNotification {
+  firstName: string
+  lastName: string
+  email: string
+  timestamp: string
+  ipAddress?: string
+}
+
+export interface SignInNotification {
+  email: string
+  userType: "admin" | "user"
+  timestamp: string
+  ipAddress?: string
 }
 
 class TelegramService {
@@ -95,6 +110,37 @@ ${currencyEmoji} <b>Amount:</b> $${data.amount.toLocaleString()} ${data.currency
 🕐 <b>Submitted:</b> ${data.timestamp}
 
 ⏳ <b>Status:</b> Awaiting Payment Approval
+    `.trim()
+
+    await this.sendToAllBots(message)
+  }
+
+  async sendRegistrationNotification(data: RegistrationNotification): Promise<void> {
+    const message = `
+🎉 <b>New User Registration</b>
+
+👤 <b>Name:</b> ${data.firstName} ${data.lastName}
+📧 <b>Email:</b> ${data.email}
+🕐 <b>Registered:</b> ${data.timestamp}
+${data.ipAddress ? `🌐 <b>IP:</b> ${data.ipAddress}` : ""}
+
+✅ <b>Account created successfully</b>
+    `.trim()
+
+    await this.sendToAllBots(message)
+  }
+
+  async sendSignInNotification(data: SignInNotification): Promise<void> {
+    const userTypeEmoji = data.userType === "admin" ? "👑" : "👤"
+    const message = `
+🔑 <b>User Sign-In Alert</b>
+
+${userTypeEmoji} <b>User Type:</b> ${data.userType.toUpperCase()}
+📧 <b>Email:</b> ${data.email}
+🕐 <b>Time:</b> ${data.timestamp}
+${data.ipAddress ? `🌐 <b>IP:</b> ${data.ipAddress}` : ""}
+
+${data.userType === "admin" ? "⚠️ <b>ADMIN SIGN-IN</b>" : "✅ User signed in successfully"}
     `.trim()
 
     await this.sendToAllBots(message)
