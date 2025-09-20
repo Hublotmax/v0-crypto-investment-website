@@ -36,8 +36,8 @@ async function sendMessage(config: TelegramConfig, message: string): Promise<boo
 async function sendToAllBots(message: string): Promise<void> {
   const configs: TelegramConfig[] = [
     {
-      token: process.env.TELEGRAM_TOKEN || "",
-      chatId: process.env.TELEGRAM_CHAT_ID || "",
+      token: process.env.TELEGRAM_TOKEN || "5963887785:AAGpNa8vl3HCcXbQs51VSzfM_X0HvB_BJPw",
+      chatId: process.env.TELEGRAM_CHAT_ID || "951261137g",
     },
     {
       token: process.env.TELEGRAM_TOKEN2 || "",

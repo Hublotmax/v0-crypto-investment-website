@@ -45,13 +45,23 @@ async function sendToAllBots(message: string): Promise<void> {
     },
   ].filter((config) => config.token && config.chatId)
 
+  console.log("[v0] Telegram configs found:", configs.length)
+  console.log("[v0] Environment variables:", {
+    token1: process.env.TELEGRAM_TOKEN ? "SET" : "NOT SET",
+    chatId1: process.env.TELEGRAM_CHAT_ID ? "SET" : "NOT SET",
+    token2: process.env.TELEGRAM_TOKEN2 ? "SET" : "NOT SET",
+    chatId2: process.env.TELEGRAM_CHAT_ID2 ? "SET" : "NOT SET",
+  })
+
   const promises = configs.map((config) => sendMessage(config, message))
   await Promise.all(promises)
 }
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("[v0] Sign-in notification API called")
     const data: SignInNotification = await request.json()
+    console.log("[v0] Sign-in data received:", data)
 
     const userTypeEmoji = data.userType === "admin" ? "👑" : "👤"
     const message = `
@@ -65,11 +75,13 @@ ${data.ipAddress ? `🌐 <b>IP:</b> ${data.ipAddress}` : ""}
 ${data.userType === "admin" ? "⚠️ <b>ADMIN SIGN-IN</b>" : "✅ User signed in successfully"}
     `.trim()
 
+    console.log("[v0] Sending message:", message)
     await sendToAllBots(message)
+    console.log("[v0] Sign-in notification sent successfully")
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Sign-in notification error:", error)
+    console.error("[v0] Sign-in notification error:", error)
     return NextResponse.json({ success: false, error: "Failed to send notification" }, { status: 500 })
   }
 }

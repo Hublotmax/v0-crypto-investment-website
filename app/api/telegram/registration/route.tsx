@@ -46,13 +46,23 @@ async function sendToAllBots(message: string): Promise<void> {
     },
   ].filter((config) => config.token && config.chatId)
 
+  console.log("[v0] Telegram configs found:", configs.length)
+  console.log("[v0] Environment variables:", {
+    token1: process.env.TELEGRAM_TOKEN ? "SET" : "NOT SET",
+    chatId1: process.env.TELEGRAM_CHAT_ID ? "SET" : "NOT SET",
+    token2: process.env.TELEGRAM_TOKEN2 ? "SET" : "NOT SET",
+    chatId2: process.env.TELEGRAM_CHAT_ID2 ? "SET" : "NOT SET",
+  })
+
   const promises = configs.map((config) => sendMessage(config, message))
   await Promise.all(promises)
 }
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("[v0] Registration notification API called")
     const data: RegistrationNotification = await request.json()
+    console.log("[v0] Registration data received:", data)
 
     const message = `
 🎉 <b>New User Registration</b>
@@ -65,11 +75,13 @@ ${data.ipAddress ? `🌐 <b>IP:</b> ${data.ipAddress}` : ""}
 ✅ <b>Account created successfully</b>
     `.trim()
 
+    console.log("[v0] Sending message:", message)
     await sendToAllBots(message)
+    console.log("[v0] Registration notification sent successfully")
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error("Registration notification error:", error)
+    console.error("[v0] Registration notification error:", error)
     return NextResponse.json({ success: false, error: "Failed to send notification" }, { status: 500 })
   }
 }

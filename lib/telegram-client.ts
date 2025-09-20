@@ -34,57 +34,65 @@ export interface SignInNotification {
 class TelegramClientService {
   async sendLoginNotification(data: LoginNotification): Promise<void> {
     try {
-      await fetch("/api/telegram/login", {
+      console.log("[v0] Sending login notification:", data)
+      const response = await fetch("/api/telegram/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
+      console.log("[v0] Login notification response:", response.status, response.ok)
     } catch (error) {
-      console.error("Failed to send login notification:", error)
+      console.error("[v0] Failed to send login notification:", error)
     }
   }
 
   async sendPaymentNotification(data: PaymentNotification): Promise<void> {
     try {
-      await fetch("/api/telegram/payment", {
+      console.log("[v0] Sending payment notification:", data)
+      const response = await fetch("/api/telegram/payment", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
+      console.log("[v0] Payment notification response:", response.status, response.ok)
     } catch (error) {
-      console.error("Failed to send payment notification:", error)
+      console.error("[v0] Failed to send payment notification:", error)
     }
   }
 
   async sendRegistrationNotification(data: RegistrationNotification): Promise<void> {
     try {
-      await fetch("/api/telegram/registration", {
+      console.log("[v0] Sending registration notification:", data)
+      const response = await fetch("/api/telegram/registration", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
+      console.log("[v0] Registration notification response:", response.status, response.ok)
     } catch (error) {
-      console.error("Failed to send registration notification:", error)
+      console.error("[v0] Failed to send registration notification:", error)
     }
   }
 
   async sendSignInNotification(data: SignInNotification): Promise<void> {
     try {
-      await fetch("/api/telegram/signin", {
+      console.log("[v0] Sending sign-in notification:", data)
+      const response = await fetch("/api/telegram/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       })
+      console.log("[v0] Sign-in notification response:", response.status, response.ok)
     } catch (error) {
-      console.error("Failed to send sign-in notification:", error)
+      console.error("[v0] Failed to send sign-in notification:", error)
     }
   }
 }
