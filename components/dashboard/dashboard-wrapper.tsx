@@ -11,6 +11,7 @@ import { WithdrawalSection } from "@/components/dashboard/withdrawal-section"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { getCurrentUser, type User } from "@/lib/auth"
 import { Loader2, CheckCircle } from "lucide-react"
+import { ChatSupportWidget } from "@/components/chat-support-widget"
 
 function DashboardContent() {
   const [user, setUser] = useState<User | null>(null)
@@ -85,6 +86,7 @@ function DashboardContent() {
           </div>
         </div>
       </main>
+      <ChatSupportWidget />
     </div>
   )
 }

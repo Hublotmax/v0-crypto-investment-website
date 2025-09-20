@@ -5,6 +5,7 @@ import { RecentWithdrawals } from "@/components/recent-withdrawals"
 import { Features } from "@/components/features"
 import { TestimonialsSlider } from "@/components/testimonials-slider"
 import { Footer } from "@/components/footer"
+import { ChatSupportWidget } from "@/components/chat-support-widget"
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
       <Features />
       <TestimonialsSlider />
       <Footer />
+      <ChatSupportWidget />
     </main>
   )
 }
