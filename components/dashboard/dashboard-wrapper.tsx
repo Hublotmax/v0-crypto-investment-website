@@ -7,6 +7,7 @@ import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { DashboardStats } from "@/components/dashboard/dashboard-stats"
 import { InvestmentsList } from "@/components/dashboard/investments-list"
 import { RecentActivity } from "@/components/dashboard/recent-activity"
+import { WithdrawalSection } from "@/components/dashboard/withdrawal-section"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { getCurrentUser, type User } from "@/lib/auth"
 import { Loader2, CheckCircle } from "lucide-react"
@@ -71,12 +72,15 @@ function DashboardContent() {
 
           <DashboardStats investments={user.investments} />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             <div className="lg:col-span-2">
               <InvestmentsList investments={user.investments} />
             </div>
-            <div>
+            <div className="space-y-8">
               <RecentActivity investments={user.investments} />
+            </div>
+            <div>
+              <WithdrawalSection investments={user.investments} />
             </div>
           </div>
         </div>
