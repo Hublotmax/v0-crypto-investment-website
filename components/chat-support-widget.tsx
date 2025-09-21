@@ -19,7 +19,7 @@ export function ChatSupportWidget() {
 
   const handleWhatsAppChat = () => {
     const whatsappMessage = encodeURIComponent(`Hi Susan, I need help with: ${message}`)
-    window.open(`https://wa.me/2348080449556?text=${whatsappMessage}`, "_blank")
+    window.open(`https://wa.me/+19543129264?text=${whatsappMessage}`, "_blank")
     setMessage("")
     setShowContactOptions(false)
     setIsOpen(false)

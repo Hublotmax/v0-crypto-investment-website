@@ -16,6 +16,7 @@ import { logout, type User } from "@/lib/auth"
 import { ProfileModal } from "./profile-modal"
 import { SettingsModal } from "./settings-modal"
 import { NotificationsModal } from "./notifications-modal"
+import { LanguageTranslator } from "@/components/language-translator"
 
 interface DashboardHeaderProps {
   user: User
@@ -61,6 +62,10 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           </nav>
 
           <div className="flex items-center space-x-4">
+            <div className="hidden md:block">
+              <LanguageTranslator />
+            </div>
+
             <Button variant="ghost" size="icon" className="hidden md:flex" onClick={() => setIsNotificationsOpen(true)}>
               <Bell className="h-5 w-5" />
             </Button>
@@ -132,6 +137,12 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
               >
                 Portfolio
               </Link>
+              <div className="pt-2 border-t">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Language</span>
+                  <LanguageTranslator />
+                </div>
+              </div>
               <div className="border-t pt-4 space-y-2">
                 <div className="flex items-center space-x-3 pb-2">
                   <Avatar className="h-8 w-8">

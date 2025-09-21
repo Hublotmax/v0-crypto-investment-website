@@ -4,6 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
+import { LanguageTranslator } from "@/components/language-translator"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -31,8 +32,9 @@ export function Header() {
           </Link>
         </nav>
 
-        {/* Desktop Auth Buttons */}
+        {/* Desktop Auth Buttons and Language Selector */}
         <div className="hidden md:flex items-center space-x-4">
+          <LanguageTranslator />
           <Link href="/login">
             <Button variant="ghost">Sign In</Button>
           </Link>
@@ -60,6 +62,12 @@ export function Header() {
             <Link href="#about" className="block text-muted-foreground hover:text-foreground transition-colors">
               About
             </Link>
+            <div className="pt-2 border-t">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium">Language</span>
+                <LanguageTranslator />
+              </div>
+            </div>
             <div className="flex flex-col space-y-2 pt-4">
               <Link href="/login">
                 <Button variant="ghost" className="w-full">
